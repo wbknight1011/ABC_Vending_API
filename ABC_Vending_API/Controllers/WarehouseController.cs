@@ -1,6 +1,7 @@
 ﻿using ABC_Vending_API.DTOs;
 using ABC_Vending_API.Models;
 using ABC_Vending_API.Repos;
+using ABC_Vending_API.Services;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -12,21 +13,23 @@ namespace ABC_Vending_API.Controllers
 	public class WarehouseController : ControllerBase
 	{
 		IWarehouesRepository _warehouesRepository;
-		public WarehouseController(IWarehouesRepository warehouesRepository)
+		IInventoryService _inventoryService;
+		public WarehouseController(IWarehouesRepository warehouesRepository, IInventoryService inventoryService)
 		{
 			_warehouesRepository = warehouesRepository;
+			_inventoryService = inventoryService;
 		}
 
 		// GET: api/<WarehouseController>
 		[HttpGet]
-		public async Task<IEnumerable<Warehouse>> Get()
+		public async Task<IEnumerable<WarehouseViewModel>> Get()
 		{
-			return await _warehouesRepository.GetWarehousesAsync().ConfigureAwait(false);
+			return await _inventoryService.GetWarehouses().ConfigureAwait(false);
 		}
 
 		// GET api/<WarehouseController>/5
 		[HttpGet("{id}")]
-		public async Task<Warehouse> Get(Guid Id)
+		public async Task<Warehouse> Get([FromRoute]Guid Id)
 		{
 			return await _warehouesRepository.GetWarehouseAsync(Id).ConfigureAwait(false);
 		}

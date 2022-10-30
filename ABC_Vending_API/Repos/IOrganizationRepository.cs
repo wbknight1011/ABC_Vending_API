@@ -9,14 +9,14 @@ public interface IOrganizationRepository
 	/// </summary>
 	/// <param name="WarehouseId"></param>
 	/// <returns></returns>
-	public Task<int> WarehouseTotalProductCountAsync(Guid WarehouseId);
+	public Task<int> GetDistinctProductCount(Guid WarehouseId);
 
 	/// <summary>
 	/// Returns the number of vending machines for a given warehouse.
 	/// </summary>
 	/// <param name="WarehouseId"></param>
 	/// <returns></returns>
-	public Task<int> WarehouseTotalMachineCountAsync(Guid WarehouseId);
+	public Task<int> GetVendingMachineCount(Guid WarehouseId);
 
 	/// <summary>
 	/// Retrieves the product list for a given warehouse.

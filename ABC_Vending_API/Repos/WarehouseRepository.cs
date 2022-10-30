@@ -7,40 +7,34 @@ namespace ABC_Vending_API.Repos;
 
 public class WarehouseRepository : IWarehouesRepository
 {
+	private readonly OrganizationContext _ctx;
+
+	public WarehouseRepository(OrganizationContext ctx)
+	{
+		_ctx = ctx;
+	}
 	public async Task AddWarehouseAsync(CreateWarehouseDto createDto)
 	{
-		using (var ctx = new WarehouseContext())
-		{
-			await ctx.Warehouses.AddAsync(new Warehouse(Guid.NewGuid(), createDto.Name, createDto.Location)).ConfigureAwait(false);
-		}
+		await _ctx.Warehouses.AddAsync(new Warehouse(Guid.NewGuid(), createDto.Name, createDto.Location)).ConfigureAwait(false);
 	}
 
 	public async Task DeleteWarehouseAsync(Guid Id)
 	{
-		using (var ctx = new WarehouseContext())
+		var warehouseRemoved = await _ctx.Warehouses.SingleOrDefaultAsync(w => w.Id == Id).ConfigureAwait(false);
+		if (warehouseRemoved != null)
 		{
-			var warehouseRemoved = await ctx.Warehouses.SingleOrDefaultAsync(w => w.Id == Id).ConfigureAwait(false);
-			if (warehouseRemoved != null)
-			{
-				ctx.Warehouses.Remove(warehouseRemoved);
-				await ctx.SaveChangesAsync().ConfigureAwait(false);
-			}
+			_ctx.Warehouses.Remove(warehouseRemoved);
+			await _ctx.SaveChangesAsync().ConfigureAwait(false);
 		}
 	}
 
 	public async Task<Warehouse> GetWarehouseAsync(Guid Id)
 	{
-		using (var ctx = new WarehouseContext())
-		{
-			return await ctx.Warehouses.SingleOrDefaultAsync(x => x.Id == Id).ConfigureAwait(false);
-		}
+		return await _ctx.Warehouses.SingleOrDefaultAsync(x => x.Id == Id).ConfigureAwait(false);
 	}
 
 	public async Task<IEnumerable<Warehouse>> GetWarehousesAsync()
 	{
-		using (var ctx = new WarehouseContext())
-		{
-			return await ctx.Warehouses.ToArrayAsync().ConfigureAwait(false);
-		}
+		return await _ctx.Warehouses.ToArrayAsync().ConfigureAwait(false);
 	}
 }

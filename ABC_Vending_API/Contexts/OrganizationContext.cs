@@ -5,9 +5,10 @@ namespace ABC_Vending_API.Contexts;
 
 public class OrganizationContext : DbContext
 {
-	public OrganizationContext() : base()
+	public OrganizationContext(DbContextOptions<OrganizationContext> options) 
+		: base(options)
 	{
-
+		Database.EnsureCreated();
 	}
 
 	public DbSet<Warehouse> Warehouses { get; set; }
