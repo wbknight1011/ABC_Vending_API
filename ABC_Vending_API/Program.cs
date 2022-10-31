@@ -22,6 +22,16 @@ builder.Services.AddDbContext<OrganizationContext>(o =>
 	{
 		o.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 	});
+builder.Services.AddCors(options =>
+{
+	options.AddPolicy(name: "AllowLocalHosts",
+					  policy =>
+					  {
+						  policy.WithOrigins("http://localhost:4200", "https://localhost:4200", "https://localhost:7195")
+						  .AllowAnyHeader()
+						  .AllowAnyMethod();
+					  });
+});
 
 
 
@@ -45,6 +55,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+app.UseCors("AllowLocalHosts");
 
 using (var scope = app.Services.CreateScope())
 {

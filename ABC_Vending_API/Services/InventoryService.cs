@@ -14,6 +14,11 @@ public class InventoryService : IInventoryService
 		_organizationRepo = organizationRepo;
 	}
 
+	public async Task<IEnumerable<Product>> GetWarehouseProducts(Guid warehouseId)
+	{
+		return await _organizationRepo.GetProductsForWarehouseAsync(warehouseId).ConfigureAwait(false);
+	}
+
 	public async Task<IEnumerable<WarehouseViewModel>> GetWarehouses()
 	{
 		var warehouses = await _warehouseRepo.GetWarehousesAsync().ConfigureAwait(false);
